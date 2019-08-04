@@ -32,9 +32,13 @@ Route::get('/home', 'HomeController@index')->name('home');*/
 
 Route::group(['middleware' => ['web']], function () {
 	// Authentication Routes
-	Route::get('auth/login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin']);
+
+	// Route::get('auth/login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin']);
+	Route::get('auth/login', 'Auth\AuthController@getLogin')->name('login');
+
 	Route::post('auth/login', 'Auth\AuthController@postLogin');
-	Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
+	// Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
+	Route::get('auth/logout', 'Auth\AuthController@getLogout')->name('logout');
 
 	// Registration Routes
 	Route::get('auth/register', 'Auth\AuthController@getRegister');
@@ -50,15 +54,17 @@ Route::group(['middleware' => ['web']], function () {
 	Route::resource('tags', 'TagController', ['except' => ['create']]);
 	
 	// Comments
-	Route::post('comments/{post_id}', ['uses' => 'CommentsController@store', 'as' => 'comments.store']);
-	Route::get('comments/{id}/edit', ['uses' => 'CommentsController@edit', 'as' => 'comments.edit']);
-	Route::put('comments/{id}', ['uses' => 'CommentsController@update', 'as' => 'comments.update']);
-	Route::delete('comments/{id}', ['uses' => 'CommentsController@destroy', 'as' => 'comments.destroy']);
-	Route::get('comments/{id}/delete', ['uses' => 'CommentsController@delete', 'as' => 'comments.delete']);
+	// Route::post('comments/{post_id}', ['uses' => 'CommentsController@store', 'as' => 'comments.store']);
+	Route::post('comments/{post_id}', 'CommentsController@store')->name('comments.store');
+	Route::get('comments/{id}/edit', 'CommentsController@edit')->name('comments.edit');
+	Route::put('comments/{id}', 'CommentsController@update')->name('comments.update');
+	Route::delete('comments/{id}', 'CommentsController@destroy')->name('comments.destroy');
+	Route::get('comments/{id}/delete', 'CommentsController@delete')->name('comments.delete');
 
 
-	Route::get('blog/{slug}', ['as' => 'blog.single', 'uses' => 'BlogController@getSingle'])->where('slug', '[\w\d\-\_]+');
-	Route::get('blog', ['uses' => 'BlogController@getIndex', 'as' => 'blog.index']);
+	// Route::get('blog/{slug}', ['as' => 'blog.single', 'uses' => 'BlogController@getSingle'])->where('slug', '[\w\d\-\_]+');
+	Route::get('blog/{slug}', 'BlogController@getSingle')->where('slug', '[\w\d\-\_]+')->name('blog.single');
+	Route::get('blog', 'BlogController@getIndex')->name('blog.index');
     Route::get('contact', 'PagesController@getContact');
     Route::post('contact', 'PagesController@postContact');
 	Route::get('about', 'PagesController@getAbout');

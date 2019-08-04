@@ -9,7 +9,18 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 {{ Html::style('css/styles.css') }}
 
-@yield('stylesheets')
+<!-- @yield('stylesheets') -->
+	{!! Html::style('css/parsley.css') !!}
+	{!! Html::style('css/select2.min.css') !!}
+	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+	<script>
+		tinymce.init({
+			selector: 'textarea',
+			plugins: 'link code',
+			menubar: false
+		});
+	</script>
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

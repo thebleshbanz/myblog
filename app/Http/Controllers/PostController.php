@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Post;
-use App\Tag;
-use App\Category;
-use Session;
-use Purifier;
-use Image;
+use App\Http\Requests; // include form request
+use App\Http\Controllers\Controller; // laravel default controller
+use App\Post; // post model
+use App\Tag; // tag model
+use App\Category; // category model
+use Session; // use session class
+// use Purifier;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class PostController extends Controller
 {
@@ -39,6 +39,7 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $tags = Tag::all();
+        // return view('posts.create', ['categories'=>$categories, 'tags'=>$tags]); // working
         return view('posts.create')->withCategories($categories)->withTags($tags);
     }
 
@@ -50,6 +51,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
         // validate the data
         $this->validate($request, array(
                 'title'         => 'required|max:255',
@@ -61,18 +63,21 @@ class PostController extends Controller
         // store in the database
         $post = new Post;
 
+
         $post->title = $request->title;
         $post->slug = $request->slug;
         $post->category_id = $request->category_id;
-        $post->body = Purifier::clean($request->body);
-
+        $post->body = $request->body;
+        // $post->body = Purifier::clean($request->body);
         if ($request->hasFile('featured_img')) {
-          $image = $request->file('featured_img');
-          $filename = time() . '.' . $image->getClientOriginalExtension();
-          $location = public_path('images/' . $filename);
-          Image::make($image)->resize(800, 400)->save($location);
 
-          $post->image = $filename;
+            $image = $request->file('featured_img');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $location = public_path('images/');
+
+            // $img_obj = Image::make($image)->resize(800, 400)->save($location);
+            $image->move($location, $filename);
+            $post->image = $filename;
         }
 
         $post->save();
@@ -106,6 +111,8 @@ class PostController extends Controller
     {
         // find the post in the database and save as a var
         $post = Post::find($id);
+        $postTags = $post->getPostTags($id);;
+
         $categories = Category::all();
         $cats = array();
         foreach ($categories as $category) {
@@ -118,7 +125,7 @@ class PostController extends Controller
             $tags2[$tag->id] = $tag->name;
         }
         // return the view and pass in the var we previously created
-        return view('posts.edit')->withPost($post)->withCategories($cats)->withTags($tags2);
+        return view('posts.edit')->withPost($post)->withCategories($cats)->withTags($tags2)->withPostTags($postTags);
     }
 
     /**
@@ -154,7 +161,8 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->slug = $request->input('slug');
         $post->category_id = $request->input('category_id');
-        $post->body = Purifier::clean($request->input('body'));
+        $post->body = $request->input('body');
+        // $post->body = Purifier::clean($request->input('body'));
 
         $post->save();
 

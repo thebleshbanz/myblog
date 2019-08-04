@@ -2,7 +2,7 @@
 
 @section('title', '| Create New Post')
 
-@section('stylesheets')
+<!-- @section('stylesheets')
 
 	{!! Html::style('css/parsley.css') !!}
 	{!! Html::style('css/select2.min.css') !!}
@@ -16,7 +16,7 @@
 		});
 	</script>
 
-@endsection
+@endsection -->
 
 @section('content')
 

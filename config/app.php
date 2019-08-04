@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -163,7 +163,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -177,6 +176,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
     ],
@@ -229,7 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
-        'Purifier'  => Mews\Purifier\Facades\Purifier::class,
+        // 'Purifier'  => Mews\Purifier\Facades\Purifier::class,
         'Image'     => Intervention\Image\Facades\Image::class
     ],
 
