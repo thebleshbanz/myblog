@@ -50,7 +50,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('password/reset', 'Auth\PasswordController@reset');
 
 	// Categories
-	Route::resource('categories', 'CategoryController', ['except' => ['create']]);
+	Route::resource('categories', 'CategoryController');
 	Route::resource('tags', 'TagController', ['except' => ['create']]);
 	
 	// Comments

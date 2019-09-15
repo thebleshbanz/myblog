@@ -29,7 +29,15 @@ class CategoryController extends Controller
         return view('categories.index')->withCategories($categories);
 
     }
-
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('categories.create');
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -62,6 +70,8 @@ class CategoryController extends Controller
     public function show($id)
     {
         // Display the category and all the posts in that category
+        $category = Category::find($id);
+        return view('categories.show')->withCategory($category);
     }
 
     /**
@@ -72,7 +82,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        return view('categories.edit')->withCategory($category);
     }
 
     /**
@@ -84,7 +95,18 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Save the data to the database
+        $category = Category::find($id);
+
+        $category->name = $request->input('name');
+
+        $category->save();
+
+        // set flash data with success message
+        Session::flash('success', 'This category was successfully saved.');
+
+        // redirect with flash data to posts.show
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -95,6 +117,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+
+        $category->delete();
+
+        Session::flash('success', 'The category was successfully deleted.');
+        return redirect()->route('categories.index');
     }
 }
